@@ -1,0 +1,17 @@
+{
+  "name": "Graphus Second Brain",
+  "short_name": "Graphus",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#00f3ff",
+  "description": "Seu segundo cérebro impulsionado por grafos e IA."
+}

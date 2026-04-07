@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #050505;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  background-image: 
+    radial-gradient(circle at 50% -20%, #003344 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, #001122 0%, transparent 50%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@layer base {
+  .glass {
+    @apply bg-card backdrop-blur-md border border-border;
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 10px var(--tw-shadow-color);
+  }
+  
+  .cyber-grid-bg {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+.force-graph-container canvas {
+  @apply opacity-90 transition-opacity hover:opacity-100;
+}
