@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import { Plus, Search, BrainCircuit, List, X } from "lucide-react";
 import GraphView from "@/components/graph/GraphView";
 import Editor from "@/components/editor/Editor";
+import Auth from "@/components/auth/Auth";
 import { supabase } from "@/lib/supabase";
+import { LogOut } from "lucide-react";
 
 export default function Home() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+  const [session, setSession] = useState<any>(null);
   const [selectedNote, setSelectedNote] = useState<any>(null);
   const [graphData, setGraphData] = useState<{nodes: any[], links: any[]}>({ nodes: [], links: [] });
   const [notes, setNotes] = useState<any[]>([]);
@@ -33,15 +36,43 @@ export default function Home() {
 
   useEffect(() => {
     setHasMounted(true);
-    fetchGraphData();
+
+    // Gerenciar sessão inicial e mudanças
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (session) {
+      fetchGraphData();
+    }
+  }, [session]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   if (!hasMounted) return null;
+
+  // Se não houver sessão, mostra tela de login
+  if (!session) {
+    return <Auth />;
+  }
 
   const handleSaveNote = async (novaNota: any) => {
     const response = await fetch("/api/notes", {
       method: "POST",
-      body: JSON.stringify({ ...novaNota, user_id: (await supabase.auth.getUser()).data.user?.id }),
+      body: JSON.stringify({ 
+        ...novaNota, 
+        user_id: session.user.id 
+      }),
     });
     
     if (response.ok) {
@@ -67,6 +98,13 @@ export default function Home() {
               className="bg-transparent border-none focus:outline-none text-sm w-48"
             />
           </div>
+          <button 
+            onClick={handleLogout}
+            className="glass p-3 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-all"
+            title="Sair do Cérebro"
+          >
+            <LogOut size={18} />
+          </button>
         </div>
       </header>
 
