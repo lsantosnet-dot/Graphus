@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Search, BrainCircuit, List } from "lucide-react";
+import { Plus, Search, BrainCircuit, List, X } from "lucide-react";
 import GraphView from "@/components/graph/GraphView";
 import Editor from "@/components/editor/Editor";
 import { supabase } from "@/lib/supabase";
 
 export default function Home() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const [selectedNote, setSelectedNote] = useState<any>(null);
-  const [graphData, setGraphData] = useState({ nodes: [], links: [] });
+  const [graphData, setGraphData] = useState<{nodes: any[], links: any[]}>({ nodes: [], links: [] });
   const [notes, setNotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,8 +32,11 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setHasMounted(true);
     fetchGraphData();
   }, []);
+
+  if (!hasMounted) return null;
 
   const handleSaveNote = async (novaNota: any) => {
     const response = await fetch("/api/notes", {
@@ -114,7 +118,25 @@ export default function Home() {
       {/* FAB - Add Note */}
       <button 
         onClick={() => setIsEditorOpen(true)}
-        className="absolute bottom-10 right-10 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,243,255,0.4)] hover:scale-110 active:scale-95 transition-all z-20"
+        style={{
+          position: 'fixed',
+          bottom: '40px',
+          right: '40px',
+          width: '64px',
+          height: '64px',
+          backgroundColor: '#00f3ff',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 0 30px rgba(0,243,255,0.4)',
+          zIndex: 9999,
+          cursor: 'pointer',
+          border: 'none',
+          transition: 'transform 0.2s'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
       >
         <Plus color="#000" size={32} strokeWidth={3} />
       </button>

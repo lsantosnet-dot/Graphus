@@ -25,7 +25,26 @@ export default function Editor({ isOpen, onClose, onSave }: {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-full max-w-2xl glass z-50 p-8 shadow-2xl flex flex-col gap-6 transform transition-transform duration-300">
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        maxWidth: '600px',
+        backgroundColor: 'rgba(10, 10, 10, 0.95)',
+        backdropFilter: 'blur(10px)',
+        borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+        zIndex: 10000,
+        padding: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem',
+        boxShadow: '-10px 0 30px rgba(0,0,0,0.5)',
+        color: '#fff'
+      }}
+    >
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-outfit font-bold neon-text shadow-primary">Nova Nota Cognitiva</h2>
         <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full">
