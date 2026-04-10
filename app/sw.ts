@@ -1,5 +1,5 @@
 import { defaultCache } from "@serwist/next/worker";
-import { type PrecacheEntry, Serwist } from "@serwist/sw";
+import { type PrecacheEntry, Serwist, NetworkFirst, StaleWhileRevalidate, ExpirationPlugin } from "serwist";
 
 declare const self: ServiceWorkerGlobalScope & {
   __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
@@ -14,40 +14,46 @@ const serwist = new Serwist({
     {
       // Cache para a API de notas - prioriza rede, mas funciona offline
       matcher: ({ url }) => url.pathname.startsWith("/api/notes"),
-      handler: "NetworkFirst",
-      options: {
+      handler: new NetworkFirst({
         cacheName: "notes-data",
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 24 * 60 * 60, // 24 horas
-        },
-      },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 50,
+            maxAgeSeconds: 24 * 60 * 60, // 24 horas
+          }),
+        ],
+      }),
     },
     {
       // Cache de imagens e assets estáticos
       matcher: ({ request }) => request.destination === "image",
-      handler: "StaleWhileRevalidate",
-      options: {
+      handler: new StaleWhileRevalidate({
         cacheName: "images",
-        expiration: {
-          maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 dias
-        },
-      },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 60,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 dias
+          }),
+        ],
+      }),
     },
     {
       // Cache de fontes
       matcher: ({ request }) => request.destination === "font",
-      handler: "StaleWhileRevalidate",
-      options: {
+      handler: new StaleWhileRevalidate({
         cacheName: "fonts",
-        expiration: {
-          maxEntries: 10,
-          maxAgeSeconds: 30 * 24 * 60 * 60,
-        },
-      },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 10,
+            maxAgeSeconds: 30 * 24 * 60 * 60,
+          }),
+        ],
+      }),
     },
   ],
 });
 
 serwist.addEventListeners();
+
+export type {};
+

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { Mail, Sparkles, BrainCircuit } from "lucide-react";
 
 export default function Auth() {
+  const [supabase] = useState(() => createClient());
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);

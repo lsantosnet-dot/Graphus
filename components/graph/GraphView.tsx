@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
   ssr: false,
@@ -14,6 +14,7 @@ interface GraphData {
 
 export default function GraphView({ data }: { data: GraphData }) {
   const [windowSize, setWindowSize] = useState({ width: 800, height: 600 });
+  const fgRef = useRef<any>(null);
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -24,9 +25,17 @@ export default function GraphView({ data }: { data: GraphData }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (fgRef.current) {
+      // Configura a distância das conexões via motor D3
+      fgRef.current.d3Force("link").distance((d: any) => (1 - (d.weight || 0.5)) * 150 + 30);
+    }
+  }, [data]);
+
   return (
     <div className="force-graph-container w-full h-full">
       <ForceGraph2D
+        ref={fgRef}
         graphData={data}
         width={windowSize.width}
         height={windowSize.height}
@@ -38,7 +47,6 @@ export default function GraphView({ data }: { data: GraphData }) {
         linkDirectionalParticleSpeed={d => (d.weight || 0.5) * 0.01}
         d3VelocityDecay={0.3}
         onEngineStop={() => console.log("Engine Stopped")}
-        linkDistance={d => (1 - (d.weight || 0.5)) * 150 + 30}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name;
           const fontSize = 12 / globalScale;

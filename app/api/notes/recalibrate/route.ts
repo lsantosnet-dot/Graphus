@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     // 2. Buscar todas as notas do usuário
     const { data: notas, error: fetchError } = await supabase
       .from("notas")
-      .select("id, titulo, conteúdo")
+      .select('id, titulo, "conteúdo"')
       .eq("user_id", user.id);
 
     if (fetchError) throw fetchError;

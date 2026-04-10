@@ -11,17 +11,15 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@serwist/next": "^9.5.7",
-    "@serwist/precaching": "^9.5.7",
-    "@serwist/sw": "^9.5.7",
-    "@serwist/utils": "^9.5.7",
+    "serwist": "^9.5.7",
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.102.1",
     "clsx": "^2.1.0",
-    "lucide-react": "^0.344.0",
-    "next": "15.0.0",
+    "lucide-react": "^1.8.0",
+    "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-force-graph-2d": "^1.25.4",
+    "react-force-graph-2d": "^1.29.1",
     "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {

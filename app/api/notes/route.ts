@@ -8,7 +8,7 @@ export async function GET() {
     
     const { data: notas, error: notesError } = await supabase
       .from("notas")
-      .select("id, titulo, conteúdo, created_at")
+      .select('id, titulo, "conteúdo", created_at')
       .order("created_at", { ascending: false });
 
     const { data: conexoes, error: connError } = await supabase
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       .from("notas")
       .update({ embedding: embedding })
       .eq("id", nota.id)
-      .select('*', { count: 'exact', head: true }); // Apenas para conferir se afetou algo
+      .select('*'); // Removido argumentos inválidos na nova versão do SDK
 
     if (updateError) {
       console.error("❌ Erro no UPDATE do embedding:", updateError);

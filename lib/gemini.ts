@@ -23,9 +23,9 @@ export async function generateEmbedding(text: string) {
       // Especificamos outputDimensionality: 768 para compatibilidade com o banco
       // Usando técnica Matryoshka nativa do Gemini
       const result = await model.embedContent({
-        content: { parts: [{ text }] },
+        content: { role: "user", parts: [{ text }] },
         outputDimensionality: 768
-      });
+      } as any);
 
       if (result.embedding.values) {
         // Double check de segurança: Truncar se por algum motivo retornar diferente
