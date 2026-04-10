@@ -2,6 +2,27 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generateEmbedding, extractEntities } from "@/lib/gemini";
 
+export async function GET() {
+  try {
+    const supabase = await createClient();
+    
+    const { data: notas, error: notesError } = await supabase
+      .from("notas")
+      .select("id, titulo, conteúdo, created_at")
+      .order("created_at", { ascending: false });
+
+    const { data: conexoes, error: connError } = await supabase
+      .from("conexoes")
+      .select("id_origem, id_destino, peso");
+
+    if (notesError || connError) throw notesError || connError;
+
+    return NextResponse.json({ notas, conexoes });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { titulo, conteúdo, user_id } = await request.json();

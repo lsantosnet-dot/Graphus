@@ -16,10 +16,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/page.js"
     ],
+    "/api/notes/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notes/route.js"
+    ],
     "/(dashboard)/graph/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/graph/page.js"
+    ],
+    "/(dashboard)/notes/new/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/notes/new/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

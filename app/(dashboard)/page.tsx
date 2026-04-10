@@ -16,13 +16,14 @@ export default function ArchivePage() {
 
   const fetchNotes = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("notas")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (data) {
-      setNotes(data);
+    try {
+      const response = await fetch("/api/notes");
+      const { notas } = await response.json();
+      if (notas) {
+        setNotes(notas);
+      }
+    } catch (err) {
+      console.error("Erro ao buscar notas:", err);
     }
     setLoading(false);
   };

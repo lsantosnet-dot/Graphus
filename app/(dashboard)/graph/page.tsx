@@ -12,15 +12,21 @@ export default function GraphPage() {
   const fetchGraphData = async () => {
     setLoading(true);
     
-    // Buscar notas
-    const { data: ntas } = await supabase.from("notas").select("id, titulo");
-    // Buscar conexões
-    const { data: conxs } = await supabase.from("conexoes").select("id_origem, id_destino");
+    try {
+      const response = await fetch("/api/notes");
+      const { notas, conexoes } = await response.json();
 
-    if (ntas) {
-      const nodes = ntas.map((n: any) => ({ id: n.id, name: n.titulo }));
-      const links = conxs ? conxs.map((c: any) => ({ source: c.id_origem, target: c.id_destino })) : [];
-      setGraphData({ nodes, links });
+      if (notas) {
+        const nodes = notas.map((n: any) => ({ id: n.id, name: n.titulo }));
+        const links = conexoes ? conexoes.map((c: any) => ({ 
+          source: c.id_origem, 
+          target: c.id_destino,
+          weight: c.peso 
+        })) : [];
+        setGraphData({ nodes, links });
+      }
+    } catch (err) {
+      console.error("Erro ao buscar dados do grafo:", err);
     }
     setLoading(false);
   };
