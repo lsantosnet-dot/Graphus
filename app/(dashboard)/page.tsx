@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { List, Search, Clock, ChevronRight, FileText, Trash2, AlertTriangle, Save } from "lucide-react";
+import { List, Search, Clock, ChevronRight, FileText, Trash2, AlertTriangle, Save, RefreshCcw, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ArchivePage() {
@@ -87,6 +87,24 @@ export default function ArchivePage() {
     fetchNotes();
   }, [supabase]);
 
+  const handleRecalibrate = async () => {
+    if (!confirm("Isso irá recalibrar todos os seus embeddings e conexões. Pode levar alguns segundos. Continuar?")) return;
+    
+    setIsSaving(true);
+    try {
+      const response = await fetch("/api/notes/recalibrate", { method: "POST" });
+      if (response.ok) {
+        alert("Recalibração concluída com sucesso!");
+        await fetchNotes();
+      } else {
+        alert("Erro na recalibração.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setIsSaving(false);
+  };
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[60vh]">
@@ -98,14 +116,25 @@ export default function ArchivePage() {
   return (
     <div className="px-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Page Title */}
-      <div className="space-y-1">
-        <h2 className="text-3xl font-outfit font-black tracking-tighter flex items-center gap-3">
-          SISTEMA DE <span className="text-primary italic">ARQUIVOS</span>
-        </h2>
-        <p className="text-white/60 text-xs uppercase tracking-[0.2em] font-bold text-white">
-          {notes.length} Nodos de Conhecimento Ativos
-        </p>
-      </div>
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-3xl font-outfit font-black tracking-tighter flex items-center gap-3">
+              SISTEMA DE <span className="text-primary italic">ARQUIVOS</span>
+            </h2>
+            <p className="text-white/60 text-xs uppercase tracking-[0.2em] font-bold">
+              {notes.length} Nodos de Conhecimento Ativos
+            </p>
+          </div>
+          <button
+            onClick={handleRecalibrate}
+            disabled={isSaving}
+            className="group flex items-center gap-2 px-4 py-2 bg-primary/5 hover:bg-primary/10 border border-primary/20 rounded-xl transition-all text-primary"
+            title="Recalibrar Conexões IA"
+          >
+            <RefreshCcw size={16} className={cn("transition-transform duration-700", isSaving && "animate-spin")} />
+            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Recalibrar Grafo</span>
+          </button>
+        </div>
 
       {/* Notes List */}
       <div className="grid gap-4 pb-12">

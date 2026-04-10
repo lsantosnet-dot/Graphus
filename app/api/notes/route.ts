@@ -23,7 +23,8 @@ export async function POST(request: Request) {
     console.log("✅ Nota inserida ID:", nota.id);
 
     // 2. Processamento IA
-    const embedding = await generateEmbedding(conteúdo);
+    const embeddingInput = `Título: ${titulo}\nConteúdo: ${conteúdo}`;
+    const embedding = await generateEmbedding(embeddingInput);
     const entidades = await extractEntities(conteúdo);
     
     console.log("✅ IA Processada. Embedding size:", embedding?.length);
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
     // 4. Buscar similaridade e criar conexões
     const { data: similares, error: searchError } = await supabase.rpc("buscar_notas_similares", {
       query_embedding: embedding,
-      match_threshold: 0.3,
+      match_threshold: 0.6,
       match_count: 5,
     });
 
@@ -99,7 +100,8 @@ export async function PATCH(request: Request) {
     }
 
     // 2. Processamento IA (Novo Embedding)
-    const embedding = await generateEmbedding(conteúdo);
+    const embeddingInput = `Título: ${titulo}\nConteúdo: ${conteúdo}`;
+    const embedding = await generateEmbedding(embeddingInput);
     
     // Atualizar embedding no banco
     const { error: embedUpdateError } = await supabase
@@ -127,7 +129,7 @@ export async function PATCH(request: Request) {
     // 4. Buscar novas similaridades
     const { data: similares, error: searchError } = await supabase.rpc("buscar_notas_similares", {
       query_embedding: embedding,
-      match_threshold: 0.3,
+      match_threshold: 0.6,
       match_count: 5,
     });
 

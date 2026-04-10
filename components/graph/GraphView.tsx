@@ -9,7 +9,7 @@ const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
 
 interface GraphData {
   nodes: { id: string; name: string; val?: number }[];
-  links: { source: string; target: string }[];
+  links: { source: string; target: string; weight?: number }[];
 }
 
 export default function GraphView({ data }: { data: GraphData }) {
@@ -34,6 +34,11 @@ export default function GraphView({ data }: { data: GraphData }) {
         nodeLabel="name"
         nodeColor={() => "#00f3ff"}
         linkColor={() => "rgba(255, 255, 255, 0.2)"}
+        linkDirectionalParticles={2}
+        linkDirectionalParticleSpeed={d => (d.weight || 0.5) * 0.01}
+        d3VelocityDecay={0.3}
+        onEngineStop={() => console.log("Engine Stopped")}
+        linkDistance={d => (1 - (d.weight || 0.5)) * 150 + 30}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name;
           const fontSize = 12 / globalScale;
