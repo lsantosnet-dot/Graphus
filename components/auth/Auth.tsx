@@ -35,8 +35,10 @@ export default function Auth() {
     });
 
     if (error) {
+      console.error("Supabase Error (Auth):", error);
       setError("Erro ao enviar código: " + error.message);
     } else {
+      console.log("OTP Code sent via Supabase");
       setView("verify");
     }
     setLoading(false);
@@ -272,6 +274,11 @@ export default function Auth() {
 
         <div className="pt-8 border-t border-white/5 text-center">
           <p className="text-[10px] text-white/20 uppercase tracking-[0.2em]">Criptografia Simbiótica Ativa</p>
+        </div>
+
+        {/* Version Marker for debugging cache */}
+        <div className="absolute bottom-4 right-6 opacity-20 text-[8px] font-mono uppercase tracking-widest pointer-events-none text-white/40">
+          Neural-Auth-v1.2-OTP
         </div>
       </div>
     </div>
