@@ -4,8 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 const EMBEDDING_MODELS = [
   "models/gemini-embedding-001",
-  "models/embedding-001",
-  "models/text-embedding-004"
+  "models/gemini-embedding-2-preview"
 ];
 
 const GENERATIVE_MODELS = [
