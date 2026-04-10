@@ -27,7 +27,8 @@ const config: Config = {
           DEFAULT: "#ffea00", // Cyber Yellow
           glow: "rgba(255, 234, 0, 0.5)",
         },
-        border: "rgba(255, 255, 255, 0.1)",
+        muted: "rgba(255, 255, 255, 0.4)",
+        border: "rgba(255, 255, 255, 0.15)",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

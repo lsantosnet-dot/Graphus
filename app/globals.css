@@ -19,7 +19,11 @@ body {
 
 @layer base {
   .glass {
-    @apply bg-card backdrop-blur-md border border-border;
+    @apply bg-card backdrop-blur-md border border-white/10;
+  }
+  
+  ::placeholder {
+    @apply text-white/30;
   }
   
   .neon-text {

@@ -72,7 +72,7 @@ export default function ArchivePage() {
         <h2 className="text-3xl font-outfit font-black tracking-tighter flex items-center gap-3">
           SISTEMA DE <span className="text-primary italic">ARQUIVOS</span>
         </h2>
-        <p className="text-white/40 text-xs uppercase tracking-[0.2em] font-bold text-white">
+        <p className="text-white/60 text-xs uppercase tracking-[0.2em] font-bold text-white">
           {notes.length} Nodos de Conhecimento Ativos
         </p>
       </div>
@@ -84,7 +84,7 @@ export default function ArchivePage() {
             <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-white/10">
               <FileText className="text-white/20 w-8 h-8" />
             </div>
-            <p className="text-white/40 font-medium">Sua mente está em branco. Inicie uma nova sinapse.</p>
+            <p className="text-white/60 font-medium">Sua mente está em branco. Inicie uma nova sinapse.</p>
           </div>
         ) : (
           notes.map((note) => (
@@ -100,7 +100,7 @@ export default function ArchivePage() {
                   <h3 className="font-outfit font-bold text-lg text-white/90 group-hover:text-white transition-colors">
                     {note.titulo}
                   </h3>
-                  <div className="flex items-center gap-3 text-white/30 text-[10px] uppercase tracking-widest font-bold">
+                  <div className="flex items-center gap-3 text-white/50 text-[10px] uppercase tracking-widest font-bold">
                     <span className="flex items-center gap-1">
                       <Clock size={10} /> {new Date(note.created_at).toLocaleDateString()}
                     </span>
@@ -112,7 +112,7 @@ export default function ArchivePage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={(e) => handleDeleteClick(e, note)}
-                  className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                  className="p-3 text-white/30 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
                   title="Deletar Nota"
                 >
                   <Trash2 size={18} />

@@ -1,5 +1,6 @@
 {
-  "/api/notes/route": "app/api/notes/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/(dashboard)/notes/new/page": "app/(dashboard)/notes/new/page.js",
   "/(dashboard)/page": "app/(dashboard)/page.js",
-  "/(dashboard)/notes/new/page": "app/(dashboard)/notes/new/page.js"
+  "/(dashboard)/graph/page": "app/(dashboard)/graph/page.js"
 }

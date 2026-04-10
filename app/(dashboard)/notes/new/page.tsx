@@ -57,7 +57,7 @@ export default function NewNotePage() {
       <header className="p-6 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-xl">
         <button 
           onClick={() => router.back()}
-          className="w-12 h-12 flex items-center justify-center rounded-2xl glass border-white/5 text-white/40 hover:text-white transition-all"
+          className="w-12 h-12 flex items-center justify-center rounded-2xl glass border-white/10 text-white/60 hover:text-white transition-all"
         >
           <ArrowLeft size={18} />
         </button>
@@ -87,7 +87,7 @@ export default function NewNotePage() {
       <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 lg:p-24 max-w-5xl mx-auto w-full space-y-12">
         {/* Title Input */}
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-white/20 uppercase tracking-[0.3em] font-black text-[10px]">
+          <div className="flex items-center gap-2 text-white/40 uppercase tracking-[0.3em] font-black text-[10px]">
             <Type size={12} /> Título do Nodo
           </div>
           <input
@@ -95,21 +95,21 @@ export default function NewNotePage() {
             placeholder="Título da Ideia..."
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
-            className="w-full bg-transparent border-none text-4xl md:text-6xl font-outfit font-black tracking-tighter text-white placeholder:text-white/5 focus:outline-none focus:ring-0 transition-all"
+            className="w-full bg-transparent border-none text-4xl md:text-6xl font-outfit font-black tracking-tighter text-white placeholder:text-white/20 focus:outline-none focus:ring-0 transition-all"
             autoFocus
           />
         </div>
 
         {/* Content Area */}
         <div className="space-y-4 flex-1">
-          <div className="flex items-center gap-2 text-white/20 uppercase tracking-[0.3em] font-black text-[10px]">
+          <div className="flex items-center gap-2 text-white/40 uppercase tracking-[0.3em] font-black text-[10px]">
             <Hash size={12} /> Conteúdo Cognitivo (Supports Markdown)
           </div>
           <textarea
             placeholder="O que está na sua mente? Documente a pesquisa..."
             value={conteúdo}
             onChange={(e) => setConteúdo(e.target.value)}
-            className="w-full h-full min-h-[400px] bg-transparent border-none text-xl md:text-2xl font-inter leading-relaxed text-white/80 placeholder:text-white/5 focus:outline-none focus:ring-0 resize-none transition-all"
+            className="w-full h-full min-h-[400px] bg-transparent border-none text-xl md:text-2xl font-inter leading-relaxed text-white/80 placeholder:text-white/20 focus:outline-none focus:ring-0 resize-none transition-all"
           />
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function NewNotePage() {
             <Sparkles size={14} /> Resumo IA
           </button>
         </div>
-        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/10 hidden sm:block">
+        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hidden sm:block">
           Draft Saved Locally
         </div>
       </footer>
