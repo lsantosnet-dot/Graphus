@@ -9,7 +9,7 @@ type AuthView = "signin" | "verify";
 export default function Auth() {
   const [supabase] = useState(() => createClient());
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [otp, setOtp] = useState<string[]>(Array(8).fill(""));
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState<AuthView>("signin");
   const [error, setError] = useState("");
@@ -46,7 +46,7 @@ export default function Auth() {
 
   const handleVerify = async () => {
     const code = otp.join("");
-    if (code.length !== 6) return;
+    if (code.length !== 8) return;
 
     setLoading(true);
     setError("");
@@ -59,7 +59,7 @@ export default function Auth() {
 
     if (error) {
       setError("Código inválido ou expirado.");
-      setOtp(Array(6).fill(""));
+      setOtp(Array(8).fill(""));
       setTimeout(() => inputRefs.current[0]?.focus(), 100);
     } else {
       // Session established — reload to enter dashboard
@@ -78,14 +78,14 @@ export default function Auth() {
     setError("");
 
     // Auto-advance to next input
-    if (value && index < 5) {
+    if (value && index < 7) {
       inputRefs.current[index + 1]?.focus();
     }
 
-    // Auto-submit when all 6 digits are filled
-    if (value && index === 5) {
+    // Auto-submit when all 8 digits are filled
+    if (value && index === 7) {
       const code = newOtp.join("");
-      if (code.length === 6) {
+      if (code.length === 8) {
         // Small delay so user sees the last digit appear
         setTimeout(() => handleVerifyWithCode(code), 150);
       }
@@ -104,7 +104,7 @@ export default function Auth() {
 
     if (error) {
       setError("Código inválido ou expirado.");
-      setOtp(Array(6).fill(""));
+      setOtp(Array(8).fill(""));
       setTimeout(() => inputRefs.current[0]?.focus(), 100);
     } else {
       window.location.href = "/";
@@ -120,28 +120,28 @@ export default function Auth() {
 
   const handleOtpPaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 8);
     if (pasted.length === 0) return;
 
-    const newOtp = Array(6).fill("");
+    const newOtp = Array(8).fill("");
     for (let i = 0; i < pasted.length; i++) {
       newOtp[i] = pasted[i];
     }
     setOtp(newOtp);
 
     // Focus the next empty or last input
-    const nextIndex = Math.min(pasted.length, 5);
+    const nextIndex = Math.min(pasted.length, 7);
     inputRefs.current[nextIndex]?.focus();
 
     // Auto-submit if full paste
-    if (pasted.length === 6) {
+    if (pasted.length === 8) {
       setTimeout(() => handleVerifyWithCode(pasted), 150);
     }
   };
 
   const handleBack = () => {
     setView("signin");
-    setOtp(Array(6).fill(""));
+    setOtp(Array(8).fill(""));
     setError("");
   };
 
@@ -215,7 +215,7 @@ export default function Auth() {
             <div className="text-center space-y-4">
               <div className="space-y-2">
                 <p className="text-white/60 text-sm">
-                  Enviamos um código de 6 dígitos para
+                  Enviamos um código de 8 dígitos para
                 </p>
                 <p className="text-primary font-bold">{email}</p>
               </div>
@@ -228,7 +228,7 @@ export default function Auth() {
               </div>
             </div>
 
-            {/* 6-Digit OTP Input */}
+            {/* 8-Digit OTP Input */}
             <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
               {otp.map((digit, index) => (
                 <input
@@ -241,7 +241,7 @@ export default function Auth() {
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(index, e)}
                   className={`
-                    w-12 h-14 text-center text-2xl font-outfit font-black
+                    w-10 h-14 text-center text-xl font-outfit font-black
                     bg-white/5 border rounded-xl
                     focus:outline-none focus:border-primary/70 focus:bg-primary/5 focus:shadow-[0_0_20px_rgba(0,243,255,0.15)]
                     transition-all duration-200
