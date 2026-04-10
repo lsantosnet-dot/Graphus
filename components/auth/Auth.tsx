@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { getURL } from "@/lib/supabase/url";
 import { Mail, Sparkles, BrainCircuit } from "lucide-react";
 
 export default function Auth() {
@@ -17,7 +18,7 @@ export default function Auth() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: `${getURL()}auth/callback`,
       },
     });
 
