@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { List, Search, Clock, ChevronRight, FileText } from "lucide-react";
+import { List, Search, Clock, ChevronRight, FileText, Trash2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ArchivePage() {
   const [notes, setNotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [supabase] = useState(() => createClient());
+  const [noteToDelete, setNoteToDelete] = useState<any>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchNotes = async () => {
     setLoading(true);
@@ -21,6 +23,34 @@ export default function ArchivePage() {
       setNotes(data);
     }
     setLoading(false);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, note: any) => {
+    e.stopPropagation();
+    setNoteToDelete(note);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!noteToDelete) return;
+
+    const idToRemove = noteToDelete.id;
+    const originalNotes = [...notes];
+
+    // Optimistic Update
+    setNotes(notes.filter((n) => n.id !== idToRemove));
+    setNoteToDelete(null);
+
+    const { error } = await supabase
+      .from("notas")
+      .delete()
+      .eq("id", idToRemove);
+
+    if (error) {
+      console.error("Erro ao deletar nota:", error);
+      // Revert on error
+      setNotes(originalNotes);
+      alert("Falha ao deletar a nota. Tente novamente.");
+    }
   };
 
   useEffect(() => {
@@ -79,11 +109,63 @@ export default function ArchivePage() {
                   </div>
                 </div>
               </div>
-              <ChevronRight className="text-white/10 group-hover:text-primary group-hover:translate-x-1 transition-all" size={20} />
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={(e) => handleDeleteClick(e, note)}
+                  className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                  title="Deletar Nota"
+                >
+                  <Trash2 size={18} />
+                </button>
+                <ChevronRight className="text-white/10 group-hover:text-primary group-hover:translate-x-1 transition-all" size={20} />
+              </div>
             </div>
           ))
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {noteToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-in fade-in duration-300">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
+            onClick={() => setNoteToDelete(null)}
+          />
+          <div className="glass w-full max-w-md p-8 rounded-[2rem] border-white/10 relative z-10 space-y-6 overflow-hidden shadow-2xl">
+            {/* Modal Glow Accent */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-right from-transparent via-red-500 to-transparent opacity-50" />
+            
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center border border-red-500/20 text-red-500">
+                <AlertTriangle size={32} />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-outfit font-black tracking-tighter text-white">
+                  CONFIRMAR <span className="text-red-500 italic">EXCLUSÃO</span>
+                </h2>
+                <p className="text-white/40 text-sm">
+                  Esta ação é irreversível. O nodo <span className="text-white/80 font-bold">"{noteToDelete.titulo}"</span> e todas as suas conexões neurais serão permanentemente removidos.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <button
+                onClick={() => setNoteToDelete(null)}
+                className="p-4 rounded-xl border border-white/5 bg-white/5 text-white/60 font-bold text-xs uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="p-4 rounded-xl border border-red-500/20 bg-red-500/10 text-red-500 font-bold text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-lg shadow-red-500/10"
+              >
+                Excluir Nodo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Background Decor */}
       <div className="fixed bottom-0 right-0 w-[50%] h-[50%] bg-primary/5 blur-[120px] -z-10 rounded-full pointer-events-none" />
