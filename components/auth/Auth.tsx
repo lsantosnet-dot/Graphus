@@ -210,11 +210,20 @@ export default function Auth() {
         {/* OTP Verification View */}
         {view === "verify" && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center space-y-2">
-              <p className="text-white/60 text-sm">
-                Enviamos um código de 6 dígitos para
-              </p>
-              <p className="text-primary font-bold">{email}</p>
+            <div className="text-center space-y-4">
+              <div className="space-y-2">
+                <p className="text-white/60 text-sm">
+                  Enviamos um código de 6 dígitos para
+                </p>
+                <p className="text-primary font-bold">{email}</p>
+              </div>
+              
+              <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 animate-pulse-slow">
+                <p className="text-primary text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
+                  📱 FOCO NO PWA: Digite os números abaixo. <br/>
+                  Evite clicar no link para não sair do app.
+                </p>
+              </div>
             </div>
 
             {/* 6-Digit OTP Input */}
