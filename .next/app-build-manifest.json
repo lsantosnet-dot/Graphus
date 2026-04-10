@@ -16,11 +16,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/page.js"
     ],
-    "/(dashboard)/notes/new/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/notes/new/page.js"
-    ],
     "/api/notes/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

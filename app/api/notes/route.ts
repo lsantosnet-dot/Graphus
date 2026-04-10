@@ -73,7 +73,88 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, nota, entidades });
   } catch (error: any) {
-    console.error("💥 Erro Crítico na API:", error);
+    console.error("💥 Erro Crítico na API (POST):", error);
+    return NextResponse.json({ success: false, error: error.message || "Erro desconhecido" }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const { id, titulo, conteúdo } = await request.json();
+    const supabase = await createClient();
+
+    console.log(`--- ATUALIZANDO NOTA ${id} ---`);
+
+    // 1. Atualizar conteúdo da nota
+    const { data: nota, error: updateError } = await supabase
+      .from("notas")
+      .update({ titulo, conteúdo })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error("❌ Erro no UPDATE da nota:", updateError);
+      throw updateError;
+    }
+
+    // 2. Processamento IA (Novo Embedding)
+    const embedding = await generateEmbedding(conteúdo);
+    
+    // Atualizar embedding no banco
+    const { error: embedUpdateError } = await supabase
+      .from("notas")
+      .update({ embedding: embedding })
+      .eq("id", id);
+
+    if (embedUpdateError) {
+      console.error("❌ Erro no UPDATE do embedding:", embedUpdateError);
+      throw embedUpdateError;
+    }
+
+    // 3. Reciclar Conexões Automáticas
+    // Removemos apenas as conexões 'automatica' onde esta nota é a origem
+    const { error: deleteConnError } = await supabase
+      .from("conexoes")
+      .delete()
+      .eq("id_origem", id)
+      .eq("tipo_conexao", "automatica");
+
+    if (deleteConnError) {
+      console.error("❌ Erro ao remover conexões antigas:", deleteConnError);
+    }
+
+    // 4. Buscar novas similaridades
+    const { data: similares, error: searchError } = await supabase.rpc("buscar_notas_similares", {
+      query_embedding: embedding,
+      match_threshold: 0.3,
+      match_count: 5,
+    });
+
+    if (searchError) {
+      console.error("❌ Erro no RPC search (PATCH):", searchError);
+    }
+
+    if (similares && similares.length > 0) {
+      const novasConexoes = similares
+        .filter((s: any) => s.id !== id)
+        .map((s: any) => ({
+          id_origem: id,
+          id_destino: s.id,
+          peso: s.similaridade,
+          tipo_conexao: "automatica",
+        }));
+
+      if (novasConexoes.length > 0) {
+        console.log(`🔗 Renovando ${novasConexoes.length} conexões...`);
+        const { error: connError } = await supabase.from("conexoes").insert(novasConexoes);
+        if (connError) console.error("❌ Erro ao inserir novas conexões:", connError);
+      }
+    }
+
+    return NextResponse.json({ success: true, nota });
+  } catch (error: any) {
+    console.error("💥 Erro Crítico na API (PATCH):", error);
     return NextResponse.json({ success: false, error: error.message || "Erro desconhecido" }, { status: 500 });
   }
 }
