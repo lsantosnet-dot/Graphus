@@ -8,12 +8,12 @@ export async function GET() {
     
     const { data: notas, error: notesError } = await supabase
       .from("notas")
-      .select('id, titulo, "conteúdo", created_at')
+      .select('id, titulo, "conteúdo", created_at, metadata')
       .order("created_at", { ascending: false });
 
     const { data: conexoes, error: connError } = await supabase
       .from("conexoes")
-      .select("id_origem, id_destino, peso");
+      .select("id_origem, id_destino, peso, tipo_conexao");
 
     if (notesError || connError) throw notesError || connError;
 

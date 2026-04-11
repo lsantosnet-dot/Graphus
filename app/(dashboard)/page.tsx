@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { List, Search, Clock, ChevronRight, FileText, Trash2, AlertTriangle, Save, RefreshCcw, Sparkles } from "lucide-react";
+import { List, Search, Clock, ChevronRight, FileText, Trash2, AlertTriangle, Save, RefreshCcw, Sparkles, Radar, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ArchivePage() {
@@ -13,6 +13,7 @@ export default function ArchivePage() {
   const [editingNote, setEditingNote] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [discoveringId, setDiscoveringId] = useState<string | null>(null);
 
   const fetchNotes = async () => {
     setLoading(true);
@@ -100,10 +101,42 @@ export default function ArchivePage() {
       } else {
         alert("Erro na recalibração.");
       }
+    setIsSaving(false);
+  };
+
+  const handleDiscovery = async (e: React.MouseEvent, note: any) => {
+    e.stopPropagation();
+    if (discoveringId) return;
+
+    setDiscoveringId(note.id);
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const response = await fetch("/api/discovery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          notaId: note.id,
+          titulo: note.titulo,
+          "conteúdo": note.conteúdo,
+          user_id: user?.id
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotes((prev: any[]) => [data.newNote, ...prev]);
+      } else {
+        const error = await response.json();
+        alert(error.error || "Falha na descoberta.");
+      }
     } catch (err) {
       console.error(err);
+      alert("Erro ao conectar com a rede neural externa.");
+    } finally {
+      setDiscoveringId(null);
     }
-    setIsSaving(false);
   };
 
   if (loading) {
@@ -151,26 +184,69 @@ export default function ArchivePage() {
             <div 
               key={note.id}
               onClick={() => handleEditClick(note)}
-              className="group glass p-5 rounded-[1.8rem] border-white/5 hover:border-primary/30 hover:bg-primary/5 transition-all cursor-pointer flex items-center justify-between"
+              className={cn(
+                "group glass p-5 rounded-[1.8rem] border-white/5 hover:border-primary/30 hover:bg-primary/5 transition-all cursor-pointer flex items-center justify-between relative overflow-hidden",
+                discoveringId === note.id && "animate-discovery-pulse"
+              )}
             >
               <div className="flex items-center gap-5">
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-primary/30 group-hover:bg-primary/10 transition-colors">
-                  <FileText className="text-white/30 group-hover:text-primary transition-colors" size={20} />
+                <div className={cn(
+                  "w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-primary/30 group-hover:bg-primary/10 transition-colors",
+                  note.metadata?.source === 'Exa.ai' && "border-purple-500/30 bg-purple-500/5"
+                )}>
+                  <FileText className={cn(
+                    "text-white/30 group-hover:text-primary transition-colors",
+                    note.metadata?.source === 'Exa.ai' && "text-purple-500"
+                  )} size={20} />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-outfit font-bold text-lg text-white/90 group-hover:text-white transition-colors">
-                    {note.titulo}
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-outfit font-bold text-lg text-white/90 group-hover:text-white transition-colors">
+                      {note.titulo}
+                    </h3>
+                    {note.metadata?.source === 'Exa.ai' && (
+                      <span className="px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-500 text-[8px] font-black uppercase tracking-widest rounded-full">
+                        Exa.ai
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-3 text-white/50 text-[10px] uppercase tracking-widest font-bold">
                     <span className="flex items-center gap-1">
                       <Clock size={10} /> {new Date(note.created_at).toLocaleDateString()}
                     </span>
                     <span className="w-1 h-1 bg-white/10 rounded-full" />
-                    <span>{note.conteúdo?.length || 0} caracteres</span>
+                    <span>{note.conteúdo?.length || 0} carac.</span>
+                    {note.metadata?.url && (
+                      <>
+                        <span className="w-1 h-1 bg-white/10 rounded-full" />
+                        <a 
+                          href={note.metadata.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1 text-primary hover:underline"
+                        >
+                          FONTE <ExternalLink size={10} />
+                        </a>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
+                {note.metadata?.source !== 'Exa.ai' && (
+                  <button
+                    onClick={(e) => handleDiscovery(e, note)}
+                    disabled={!!discoveringId}
+                    className={cn(
+                      "p-3 text-white/30 hover:text-primary hover:bg-primary/10 rounded-xl transition-all",
+                      discoveringId === note.id && "animate-spin text-primary"
+                    )}
+                    title="Descoberta Semântica Global"
+                  >
+                    {discoveringId === note.id ? <RefreshCcw size={18} /> : <Radar size={18} />}
+                  </button>
+                )}
                 <button
                   onClick={(e) => handleDeleteClick(e, note)}
                   className="p-3 text-white/30 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"

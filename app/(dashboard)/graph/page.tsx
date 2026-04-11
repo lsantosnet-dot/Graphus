@@ -17,11 +17,16 @@ export default function GraphPage() {
       const { notas, conexoes } = await response.json();
 
       if (notas) {
-        const nodes = notas.map((n: any) => ({ id: n.id, name: n.titulo }));
+        const nodes = notas.map((n: any) => ({ 
+          id: n.id, 
+          name: n.titulo,
+          source: n.metadata?.source 
+        }));
         const links = conexoes ? conexoes.map((c: any) => ({ 
           source: c.id_origem, 
           target: c.id_destino,
-          weight: c.peso 
+          weight: c.peso,
+          type: c.tipo_conexao
         })) : [];
         setGraphData({ nodes, links });
       }
@@ -58,8 +63,12 @@ export default function GraphPage() {
               <span className="text-[10px] font-bold text-white/60">NODOS (Ideias)</span>
             </div>
             <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[#A855F7] shadow-[0_0_5px_rgba(168,85,247,0.5)]" />
+              <span className="text-[10px] font-bold text-white/60">REFs (Externa)</span>
+            </div>
+            <div className="flex items-center gap-2">
               <div className="w-4 h-[1px] bg-white/20" />
-              <span className="text-[10px] font-bold text-white/60">SINAPSES (Conexões)</span>
+              <span className="text-[10px] font-bold text-white/60">SINAPSES</span>
             </div>
           </div>
         </div>

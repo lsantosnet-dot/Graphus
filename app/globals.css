@@ -56,3 +56,15 @@ body {
 .force-graph-container canvas {
   @apply opacity-90 transition-opacity hover:opacity-100;
 }
+
+@keyframes discovery-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(0, 243, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); }
+}
+
+.animate-discovery-pulse {
+  animation: discovery-pulse 2s infinite;
+  border-color: rgba(0, 243, 255, 0.5) !important;
+  background: rgba(0, 243, 255, 0.05) !important;
+}
