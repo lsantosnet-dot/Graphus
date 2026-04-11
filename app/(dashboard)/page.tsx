@@ -309,7 +309,7 @@ export default function ArchivePage() {
 
       {/* Edit Note Modal */}
       {editingNote && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300">
           <div 
             className="absolute inset-0 bg-black/80 backdrop-blur-md" 
             onClick={() => !isSaving && setEditingNote(null)}
@@ -328,14 +328,30 @@ export default function ArchivePage() {
                   EDITAR <span className="text-primary italic">NODO</span>
                 </h2>
               </div>
-              <button
-                onClick={() => setEditingNote(null)}
-                disabled={isSaving}
-                className="p-2 text-white/20 hover:text-white transition-colors"
-              >
-                <ChevronRight className="rotate-90 hidden sm:block" />
-                <span className="sm:hidden font-bold text-[10px] uppercase tracking-widest">Fechar</span>
-              </button>
+              
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={isSaving}
+                  className="bg-primary text-black font-black px-6 py-2 rounded-xl flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 shadow-[0_0_20px_rgba(0,243,255,0.2)] text-[10px] uppercase tracking-widest"
+                >
+                  {isSaving ? (
+                    <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      SINCRONIZAR <Save size={14} />
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => setEditingNote(null)}
+                  disabled={isSaving}
+                  className="p-2 text-white/20 hover:text-white transition-colors"
+                >
+                  <ChevronRight className="rotate-90 hidden sm:block" />
+                  <span className="sm:hidden font-bold text-[10px] uppercase tracking-widest">Fechar</span>
+                </button>
+              </div>
             </div>
 
             {/* Editor Body */}
@@ -364,38 +380,23 @@ export default function ArchivePage() {
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="p-6 border-t border-white/5 bg-white/[0.02] flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
+            {/* Footer - Minimal status */}
+            <div className="p-4 border-t border-white/5 bg-white/[0.01] flex items-center justify-center">
+              <div className="flex items-center gap-3 min-h-[24px]">
                 {isSaving && (
-                  <div className="flex items-center gap-3 px-4 py-2 bg-primary/10 text-primary rounded-full border border-primary/20 animate-pulse">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Recalculando Sinapses...</span>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full border border-primary/20 animate-pulse">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_5px_rgba(0,243,255,1)]" />
+                    <span className="text-[8px] font-black uppercase tracking-widest">SINCRONIZANDO...</span>
                   </div>
                 )}
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setEditingNote(null)}
-                  disabled={isSaving}
-                  className="px-6 py-3 rounded-xl text-white/40 font-bold text-xs uppercase tracking-widest hover:text-white transition-all disabled:opacity-30"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleSaveEdit}
-                  disabled={isSaving}
-                  className="bg-primary text-black font-black px-8 py-3 rounded-xl flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 shadow-[0_0_30px_rgba(0,243,255,0.2)]"
-                >
-                  {isSaving ? (
-                    <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      SINCRONIZAR <Save size={16} />
-                    </>
-                  )}
-                </button>
+                {!isSaving && (
+                  <button
+                    onClick={() => setEditingNote(null)}
+                    className="text-white/20 hover:text-white/40 font-bold text-[9px] uppercase tracking-[0.2em] transition-all"
+                  >
+                    DISCARD CHANGES
+                  </button>
+                )}
               </div>
             </div>
           </div>
