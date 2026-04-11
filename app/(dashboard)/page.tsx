@@ -101,6 +101,9 @@ export default function ArchivePage() {
       } else {
         alert("Erro na recalibração.");
       }
+    } catch (err) {
+      console.error(err);
+    }
     setIsSaving(false);
   };
 
