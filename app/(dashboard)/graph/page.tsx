@@ -1,40 +1,57 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import GraphView from "@/components/graph/GraphView";
 
 export default function GraphPage() {
-  const [graphData, setGraphData] = useState<{nodes: any[], links: any[]}>({ nodes: [], links: [] });
-  const [loading, setLoading] = useState(true);
-  const [supabase] = useState(() => createClient());
+  const [rawNotes, setRawNotes] = useState<any[]>([]);
+  const [rawConexoes, setRawConexoes] = useState<any[]>([]);
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
 
   const fetchGraphData = async () => {
     setLoading(true);
-    
     try {
       const response = await fetch("/api/notes");
       const { notas, conexoes } = await response.json();
-
       if (notas) {
-        const nodes = notas.map((n: any) => ({ 
-          id: n.id, 
-          name: n.titulo,
-          source: n.metadata?.source 
-        }));
-        const links = conexoes ? conexoes.map((c: any) => ({ 
-          source: c.id_origem, 
-          target: c.id_destino,
-          weight: c.peso,
-          type: c.tipo_conexao
-        })) : [];
-        setGraphData({ nodes, links });
+        setRawNotes(notas);
+        setRawConexoes(conexoes || []);
       }
     } catch (err) {
       console.error("Erro ao buscar dados do grafo:", err);
     }
     setLoading(false);
   };
+
+  const graphData = useMemo(() => {
+    const q = query.toLowerCase();
+    const filteredNotas = rawNotes.filter(n => {
+      if (!q) return true;
+      return n.titulo?.toLowerCase().includes(q) || n["conteúdo"]?.toLowerCase().includes(q);
+    });
+
+    const activeNodeIds = new Set(filteredNotas.map(n => n.id));
+
+    const nodes = filteredNotas.map(n => ({ 
+      id: n.id, 
+      name: n.titulo,
+      source: n.metadata?.source 
+    }));
+
+    const links = rawConexoes
+      .filter(c => activeNodeIds.has(c.id_origem) && activeNodeIds.has(c.id_destino))
+      .map(c => ({ 
+        source: c.id_origem, 
+        target: c.id_destino,
+        weight: c.peso,
+        type: c.tipo_conexao
+      }));
+
+    return { nodes, links };
+  }, [rawNotes, rawConexoes, query]);
 
   useEffect(() => {
     fetchGraphData();

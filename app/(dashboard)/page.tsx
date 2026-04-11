@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { List, Search, Clock, ChevronRight, FileText, Trash2, AlertTriangle, Save, RefreshCcw, Sparkles, Radar, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,18 @@ export default function ArchivePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [discoveringId, setDiscoveringId] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
+
+  const filteredNotes = notes.filter(note => {
+    if (!query) return true;
+    const q = query.toLowerCase();
+    return (
+      note.titulo?.toLowerCase().includes(q) || 
+      note.conteúdo?.toLowerCase().includes(q)
+    );
+  });
 
   const fetchNotes = async () => {
     setLoading(true);
@@ -175,15 +188,17 @@ export default function ArchivePage() {
 
       {/* Notes List */}
       <div className="grid gap-4 pb-12">
-        {notes.length === 0 ? (
+        {filteredNotes.length === 0 ? (
           <div className="glass p-12 rounded-[2rem] border-white/5 text-center space-y-4">
             <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-white/10">
               <FileText className="text-white/20 w-8 h-8" />
             </div>
-            <p className="text-white/60 font-medium">Sua mente está em branco. Inicie uma nova sinapse.</p>
+            <p className="text-white/60 font-medium">
+              {query ? "Nenhum nodo encontrado para esta pesquisa." : "Sua mente está em branco. Inicie uma nova sinapse."}
+            </p>
           </div>
         ) : (
-          notes.map((note) => (
+          filteredNotes.map((note) => (
             <div 
               key={note.id}
               onClick={() => handleEditClick(note)}

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { BrainCircuit, Search, LogOut } from "lucide-react";
 import BottomNav from "@/components/navigation/BottomNav";
 import LogoutButton from "@/components/auth/LogoutButton";
+import SearchBar from "@/components/navigation/SearchBar";
 
 export default async function DashboardLayout({
   children,
@@ -26,14 +27,7 @@ export default async function DashboardLayout({
         </div>
 
         <div className="flex gap-3 pointer-events-auto">
-          <div className="glass flex items-center px-4 rounded-2xl border-white/5 h-12">
-            <Search size={16} className="text-white/40 mr-2" />
-            <input 
-              type="text" 
-              placeholder="Pesquisa..." 
-              className="bg-transparent border-none focus:outline-none text-xs w-24 md:w-48 placeholder:text-white/20 text-white"
-            />
-          </div>
+          <SearchBar />
           <LogoutButton />
         </div>
       </header>
