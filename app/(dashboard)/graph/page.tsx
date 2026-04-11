@@ -8,6 +8,8 @@ import GraphView from "@/components/graph/GraphView";
 export default function GraphPage() {
   const [rawNotes, setRawNotes] = useState<any[]>([]);
   const [rawConexoes, setRawConexoes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [supabase] = useState(() => createClient());
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 
