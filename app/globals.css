@@ -3,68 +3,67 @@
 @tailwind utilities;
 
 :root {
-  --background: #050505;
-  --foreground: #ededed;
+  --background: #141312;
+  --foreground: #E6E2DF;
+  --primary: #A3B18A;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   background-image: 
-    radial-gradient(circle at 50% -20%, #003344 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, #001122 0%, transparent 50%);
+    radial-gradient(circle at 50% -20%, rgba(163, 177, 138, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(88, 129, 87, 0.05) 0%, transparent 50%);
   min-height: 100vh;
   overflow-x: hidden;
+  letter-spacing: -0.01em;
 }
 
 @layer base {
   .glass {
-    @apply bg-card backdrop-blur-md border border-white/10;
+    @apply bg-card backdrop-blur-xl border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
   }
   
   ::placeholder {
-    @apply text-white/30;
+    @apply text-foreground/20;
   }
   
-  .neon-text {
-    text-shadow: 0 0 10px var(--tw-shadow-color);
+  .serif-title {
+    @apply font-serif italic tracking-tight;
   }
   
-  .cyber-grid-bg {
-    background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  .garden-glow {
+    box-shadow: 0 0 30px rgba(163, 177, 138, 0.1);
   }
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Mindful Style */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #141312;
 }
 ::-webkit-scrollbar-thumb {
-  background: #222;
-  border-radius: 10px;
+  background: rgba(163, 177, 138, 0.2);
+  border-radius: 20px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #333;
+  background: rgba(163, 177, 138, 0.3);
 }
 
 .force-graph-container canvas {
-  @apply opacity-90 transition-opacity hover:opacity-100;
+  @apply opacity-95 transition-opacity duration-1000;
 }
 
-@keyframes discovery-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba(0, 243, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); }
+@keyframes garden-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(163, 177, 138, 0.2); }
+  70% { box-shadow: 0 0 0 20px rgba(163, 177, 138, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(163, 177, 138, 0); }
 }
 
-.animate-discovery-pulse {
-  animation: discovery-pulse 2s infinite;
-  border-color: rgba(0, 243, 255, 0.5) !important;
-  background: rgba(0, 243, 255, 0.05) !important;
+.animate-garden-pulse {
+  animation: garden-pulse 3s infinite cubic-bezier(0.4, 0, 0.6, 1);
+  border-color: rgba(163, 177, 138, 0.3) !important;
+  background: rgba(163, 177, 138, 0.03) !important;
 }

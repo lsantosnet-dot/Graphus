@@ -54,29 +54,29 @@ export default function NewNotePage() {
   return (
     <div className="fixed inset-0 bg-background z-[60] flex flex-col animate-in fade-in slide-in-from-right duration-500">
       {/* Editor Header */}
-      <header className="p-6 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-xl">
+      <header className="p-6 md:p-8 flex items-center justify-between border-b border-white/[0.03] bg-background/40 backdrop-blur-2xl">
         <button 
           onClick={() => router.back()}
-          className="w-12 h-12 flex items-center justify-center rounded-2xl glass border-white/10 text-white/60 hover:text-white transition-all"
+          className="w-12 h-12 flex items-center justify-center rounded-2xl glass border-white/[0.05] text-foreground/40 hover:text-foreground transition-all duration-300"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={20} strokeWidth={1.5} />
         </button>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 rounded-full border border-emerald-500/20">
-            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Sincronização Ativa</span>
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2.5 px-4 py-2 bg-primary/[0.05] text-primary/60 rounded-full border border-primary/10">
+            <div className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-pulse" />
+            <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Fluxo de Consciência Ativo</span>
           </div>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="bg-primary text-black font-black px-6 py-3 rounded-2xl flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 shadow-[0_0_30px_rgba(0,243,255,0.2)]"
+            className="bg-primary text-black font-bold px-8 py-3.5 rounded-2xl flex items-center gap-2 hover:brightness-105 active:scale-95 transition-all duration-500 disabled:opacity-50 shadow-xl shadow-primary/10 text-[10px] uppercase tracking-[0.2em]"
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
             ) : (
               <>
-                SALVAR SINAPSE <Save size={18} />
+                Salvar Nodo <Save size={18} />
               </>
             )}
           </button>
@@ -84,48 +84,49 @@ export default function NewNotePage() {
       </header>
 
       {/* Editor Main Content */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 lg:p-24 max-w-5xl mx-auto w-full space-y-12">
+      <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-16 lg:p-32 max-w-5xl mx-auto w-full space-y-16">
         {/* Title Input */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-white/40 uppercase tracking-[0.3em] font-black text-[10px]">
-            <Type size={12} /> Título do Nodo
+        <div className="space-y-6">
+          <div className="flex items-center gap-2.5 text-foreground/30 uppercase tracking-[0.4em] font-bold text-[9px]">
+            <Type size={12} strokeWidth={1.5} /> Título do Nodo
           </div>
           <input
             type="text"
             placeholder="Título da Ideia..."
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
-            className="w-full bg-transparent border-none text-4xl md:text-6xl font-outfit font-black tracking-tighter text-white placeholder:text-white/20 focus:outline-none focus:ring-0 transition-all"
+            className="w-full bg-transparent border-none text-4xl md:text-6xl serif-title italic text-foreground placeholder:text-foreground/10 focus:outline-none focus:ring-0 transition-all duration-500"
             autoFocus
           />
         </div>
 
         {/* Content Area */}
-        <div className="space-y-4 flex-1">
-          <div className="flex items-center gap-2 text-white/40 uppercase tracking-[0.3em] font-black text-[10px]">
-            <Hash size={12} /> Conteúdo Cognitivo (Supports Markdown)
+        <div className="space-y-6 flex-1">
+          <div className="flex items-center gap-2.5 text-foreground/30 uppercase tracking-[0.4em] font-bold text-[9px]">
+            <Hash size={12} strokeWidth={1.5} /> Conteúdo Cognitvo
           </div>
           <textarea
             placeholder="O que está na sua mente? Documente a pesquisa..."
             value={conteúdo}
             onChange={(e) => setConteúdo(e.target.value)}
-            className="w-full h-full min-h-[400px] bg-transparent border-none text-xl md:text-2xl font-inter leading-relaxed text-white/80 placeholder:text-white/20 focus:outline-none focus:ring-0 resize-none transition-all"
+            className="w-full h-full min-h-[500px] bg-transparent border-none text-xl md:text-2xl font-sans leading-relaxed text-foreground/70 placeholder:text-foreground/10 focus:outline-none focus:ring-0 resize-none transition-all duration-700"
           />
         </div>
       </div>
 
       {/* AI Assistance Bar (Conceptual) */}
-      <footer className="p-6 border-t border-white/5 bg-black/20 backdrop-blur-xl flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-primary/60 hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest bg-primary/5 px-4 py-2 rounded-xl border border-primary/10">
-            <Wand2 size={14} /> Sugerir Conexões
+      {/* AI Assistance Bar */}
+      <footer className="p-8 border-t border-white/[0.03] bg-background/60 backdrop-blur-2xl flex items-center justify-between">
+        <div className="flex items-center gap-6">
+          <button className="flex items-center gap-2.5 text-primary/40 hover:text-primary transition-all duration-300 text-[9px] font-bold uppercase tracking-[0.2em] bg-primary/[0.03] px-5 py-2.5 rounded-2xl border border-primary/5">
+            <Wand2 size={14} strokeWidth={1.5} /> Sugerir Conexões
           </button>
-          <button className="flex items-center gap-2 text-white/20 hover:text-white/40 transition-colors text-[10px] font-black uppercase tracking-widest px-4 py-2">
-            <Sparkles size={14} /> Resumo IA
+          <button className="flex items-center gap-2.5 text-foreground/20 hover:text-foreground/40 transition-all duration-300 text-[9px] font-bold uppercase tracking-[0.2em] px-5 py-2.5">
+            <Sparkles size={14} strokeWidth={1.5} /> Resumo Estruturado
           </button>
         </div>
-        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hidden sm:block">
-          Draft Saved Locally
+        <div className="text-[9px] font-bold uppercase tracking-[0.4em] text-foreground/20 hidden sm:block">
+          Sincronização Local Ativa
         </div>
       </footer>
     </div>

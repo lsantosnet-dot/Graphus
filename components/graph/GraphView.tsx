@@ -39,38 +39,40 @@ export default function GraphView({ data }: { data: GraphData }) {
         graphData={data}
         width={windowSize.width}
         height={windowSize.height}
-        backgroundColor="#050505"
+        backgroundColor="#141312"
         nodeLabel="name"
-        nodeColor={(node: any) => node.source === 'Exa.ai' ? "#A855F7" : "#00f3ff"}
-        linkColor={(link: any) => link.type === 'descoberta_ia' ? "rgba(168, 85, 247, 0.4)" : "rgba(255, 255, 255, 0.2)"}
-        linkDirectionalParticles={2}
-        linkDirectionalParticleSpeed={d => (d.weight || 0.5) * 0.01}
-        d3VelocityDecay={0.3}
+        nodeColor={(node: any) => node.source === 'Exa.ai' ? "#588157" : "#A3B18A"}
+        linkColor={(link: any) => link.type === 'descoberta_ia' ? "rgba(163, 177, 138, 0.2)" : "rgba(230, 226, 223, 0.08)"}
+        linkDirectionalParticles={1}
+        linkDirectionalParticleSpeed={d => (d.weight || 0.5) * 0.005}
+        linkDirectionalParticleWidth={1}
+        d3VelocityDecay={0.4}
         onEngineStop={() => console.log("Engine Stopped")}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name;
-          const fontSize = 12 / globalScale;
+          const fontSize = 11 / globalScale;
           const isExternal = node.source === 'Exa.ai';
-          const color = isExternal ? "#A855F7" : "#00f3ff";
+          const nodeColor = isExternal ? "#588157" : "#A3B18A";
           
-          ctx.font = `${fontSize}px Inter`;
+          ctx.font = `${fontSize}px Manrope`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           
-          // Glow effect
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = color;
+          // Subtle organic glow
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = nodeColor;
           
-          // Draw Circle
-          ctx.fillStyle = color;
+          // Draw Node (Organic Seed)
+          ctx.fillStyle = nodeColor;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, isExternal ? 4 : 3, 0, 2 * Math.PI, false);
+          ctx.arc(node.x, node.y, isExternal ? 3.5 : 2.5, 0, 2 * Math.PI, false);
           ctx.fill();
           
-          // Draw Label
-          ctx.shadowBlur = 0; // Remove shadow for text
-          ctx.fillStyle = isExternal ? "rgba(168, 85, 247, 0.9)" : "rgba(255, 255, 255, 0.8)";
-          ctx.fillText(label, node.x, node.y + (isExternal ? 10 : 8));
+          // Draw Label with refined contrast
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "rgba(230, 226, 223, 0.4)";
+          const textY = node.y + (isExternal ? 10 : 8);
+          ctx.fillText(label, node.x, textY);
         }}
       />
     </div>

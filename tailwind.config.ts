@@ -9,39 +9,42 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#050505",
-        foreground: "#ededed",
+        background: "#141312", // Deep charcoal
+        foreground: "#E6E2DF", // Off-white
         card: {
-          DEFAULT: "rgba(10, 10, 10, 0.8)",
-          foreground: "#ffffff",
+          DEFAULT: "rgba(25, 24, 23, 0.6)",
+          foreground: "#E6E2DF",
         },
         primary: {
-          DEFAULT: "#00f3ff", // Neon Cyan
-          glow: "rgba(0, 243, 255, 0.5)",
+          DEFAULT: "#A3B18A", // Soft Sage Green
+          glow: "rgba(163, 177, 138, 0.3)",
         },
         secondary: {
-          DEFAULT: "#0070f3", // Deep Blue
-          glow: "rgba(0, 112, 243, 0.5)",
+          DEFAULT: "#588157", // Deeper Sage
+          glow: "rgba(88, 129, 87, 0.3)",
         },
         accent: {
-          DEFAULT: "#ffea00", // Cyber Yellow
-          glow: "rgba(255, 234, 0, 0.5)",
+          DEFAULT: "#A3B18A",
+          glow: "rgba(163, 177, 138, 0.3)",
         },
-        muted: "rgba(255, 255, 255, 0.4)",
-        border: "rgba(255, 255, 255, 0.15)",
+        muted: "rgba(230, 226, 223, 0.4)",
+        border: "rgba(230, 226, 223, 0.1)",
+      },
+      fontFamily: {
+        serif: ["var(--font-playfair)", "serif"],
+        sans: ["var(--font-manrope)", "sans-serif"],
       },
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "cyber-grid": "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+        "garden-gradient": "radial-gradient(circle at 50% -20%, rgba(163, 177, 138, 0.15) 0%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(88, 129, 87, 0.1) 0%, transparent 50%)",
       },
       animation: {
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "glow-pulse": "glow 2s ease-in-out infinite",
+        "pulse-slow": "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "fade-in": "fadeIn 1s ease-out forwards",
       },
       keyframes: {
-        glow: {
-          "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.5", transform: "scale(1.05)" },
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
     },

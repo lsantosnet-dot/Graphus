@@ -21,9 +21,9 @@ export default async function DashboardLayout({
     <div className="relative min-h-screen flex flex-col">
       {/* Shared Header */}
       <header className="fixed top-0 left-0 right-0 p-6 z-40 flex justify-between items-center pointer-events-none">
-        <div className="flex items-center gap-3 glass p-2 px-5 rounded-2xl pointer-events-auto border-white/5 shadow-2xl">
-          <BrainCircuit className="text-primary w-5 h-5" />
-          <h1 className="font-outfit font-black text-lg tracking-tighter text-white">GRAPHUS</h1>
+        <div className="flex items-center gap-3 glass p-2 px-6 rounded-3xl pointer-events-auto border-white/[0.03] shadow-xl">
+          <BrainCircuit className="text-primary w-5 h-5 opacity-80" />
+          <h1 className="serif-title text-xl text-foreground/90">Graphus</h1>
         </div>
 
         <div className="flex gap-3 pointer-events-auto">

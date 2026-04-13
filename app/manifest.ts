@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "IA-Powered semantic graph for your cognitive research",
     start_url: "/",
     display: "standalone",
-    background_color: "#050505",
-    theme_color: "#00f3ff",
+    background_color: "#141312",
+    theme_color: "#A3B18A",
     icons: [
       {
         src: "/icons/icon-192.png",

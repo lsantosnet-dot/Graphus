@@ -1,14 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Manrope, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import InstallPrompt from "@/components/pwa/InstallPrompt";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
+const playfair = Playfair_Display({ 
+  subsets: ["latin"], 
+  variable: "--font-playfair",
+  style: ['italic', 'normal']
+});
 
 export const metadata: Metadata = {
-  title: "Graphus | Second Brain",
-  description: "IA-Powered semantic graph for your cognitive research",
+  title: "Graphus | Mindful Garden",
+  description: "IA-Powered semantic archive for your cognitive research",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -22,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#00f3ff",
+  themeColor: "#141312",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -35,9 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-inter antialiased overflow-x-hidden selection:bg-primary/30 selection:text-primary">
-        <div className="fixed inset-0 cyber-grid-bg -z-10" />
+    <html lang="pt-BR" className={`${manrope.variable} ${playfair.variable}`}>
+       <body className="font-sans antialiased overflow-x-hidden selection:bg-primary/20 selection:text-primary">
         <main className="relative min-h-screen">
           {children}
         </main>
